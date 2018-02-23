@@ -1,0 +1,52 @@
+INFORMATION RETREIVAL SYSTEM 
+
+Team members :Shubham Singal 2015A7PS0168H
+                 Rahul Ladda 2014A7PS0078H
+                 Samkit Jain 2015A7PS0102H
+
+
+
+
+This system is domain specific for searching through emails.
+The major datastructures used this project are :
+1:	unordered_map (hash table) of lists (doubly linked lists(DLLS)) for indexing 
+2:	DLL contains struct Node which contains the name i.e path of email files and term frequency of the token ;
+
+DLLs were used instead of vectors as the vector maxtrix is highly sparsed 
+
+
+Architecture of system:
+This is a rank retrival model which used tf-idf 
+using LTN.NNN weighting scheme as the queries for emails are short.
+
+scanning all files in dataset
+		||
+		\/
+reading each file
+		||
+		\/
+tokenization of data from file 
+		||
+		\/
+stemming of tokens using porter stemmer
+		||
+		\/
+creating temporary index of each file
+		||
+		\/
+merging temporary index with the master index
+		||
+		\/
+getting query from user
+		||
+		\/
+tokenization of query
+		||
+		\/
+retrieving data from index for each token
+		||
+		\/
+output location of files according to ranking of docs
+-------------------------------------------------------------
+
+
