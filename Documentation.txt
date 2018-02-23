@@ -1,0 +1,98 @@
+				INFORMATION RETREIVAL SYSTEM
+
+This system is domain specific for searching through emails.
+
+There are total 4 modules in the system namely:
+getAllFiles
+indexing
+OSLstemmer
+main module
+
+getAllFiles module:
+	This module consist of two files:
+	getAllFiles.h
+	getAllFiles.cpp
+	
+		getAllFiles.h
+		This file contains the function prototype int getAllFiles()
+
+		getAllFiles.cpp
+		This file provide defination for the function mentioned in .h file
+		This file includes dirent.h which is used to access all the files and directories in the directory at the path specified.
+		
+		opendir(const char* path) functoin is used to access the directory at path location.
+		it's return type is DIR.
+
+		readdir (DIR* dir) function is used to access the next file or folder in the directory.
+		it returns a struct dirent object.
+
+		this two functions are used to aceess all the files in the dataset 
+		then the indexing module is called on each file.
+
+		Time complexity:linear in number of files.
+
+indexing
+	This module consist of two files:
+	indexing.h
+	indexing.cpp
+
+		indexing.h
+		This file contains the class declaration of index class.
+		it consist of one static function indexing and
+		one data member myIndex which is the main static index of system
+
+		indexing.cpp
+		This file consist of a struct Node2  which is struct for temporary index
+		A Static variable defination of myIndex.
+		and fuction defination of indexing.
+
+		This function follows these opertions
+		1.open file then use tokenizer
+		2.tokenization takes place by streaming the contents of ifstream into a string 
+		3.add the token to the temparory index which is a map of string and Node2
+		4.for each token the stemming function OSLstemmer is called (is explained later).
+		5.TF of each token is updated after stemming.
+		6.tokens in subjects are given higher priority.
+		7.emails which are replies are given higher priority as they contain original emails as well.
+		8.the temperory index is merged with the master index.
+		Time complexity:linear with size of dataset.
+		Time complexity:O(nxw + tlog(df) )
+			where n=number of documents.
+				x=avg length of token.
+				w=avg number of words in document
+				df=avg document frequency of each token.
+				t=number of unique tokens.
+
+OSLstemmer
+OSL stands for OleanderStemmingLibrary.
+	This module consist of two files:
+	OSLstemmer.h
+	OSLstemmer.cpp
+
+		OSLstemmer.h
+		This file contains the function prototype std::string OSLstemmer(std::string ANSIWord);
+
+		OSLstemmer.cpp
+		This file includes english_stem.h header file which is a implementation of porter stemmer in cpp
+		This file provides defination of the above mentioned function.which takes a input of string and 
+		converts it into wstring then passes it to the stemmer function which returns a wstring.It is then 
+		converted into a string and returned.
+		Time complexity:o(n) n is the length of token
+
+
+main module 
+	This module is the driver function of the program
+		it contains the main function which follows these opertions
+		1.call getAllFiles function which returns count of indexed docs.
+		2.sorts  myIndex using a boolean compare function to compare two struct Node based on relevance
+		3.gets the query in a string
+		4.tokenize the query
+		5.call OSLstemmer for each token.
+		6 get the posting list for each token from index.
+		7.find intersection of all the postings lists.
+		8.sort the ans on relevance using a boolean compare function.
+		9.output the relevent document names with their paths.
+		Time complexity:O(n * df)
+		where n = Number of tokens in query.
+			  df= avg document frequency.
+			  
